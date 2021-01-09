@@ -1,0 +1,124 @@
+<body style="height: 100vh; background: #111111; text-align: center; overflow: hidden;">
+    <canvas id="c" width="1000" height="1000"></canvas>
+    <script>
+        context = c.getContext("2d");
+        const car = new Image();
+        const apple = new Image();
+        const canvas = new Image();
+        const mob = new Image();
+        car.src = "salih.png";
+        apple.src = "apple.png"
+        canvas.src = "salihgrass.png"
+        mob.src = "halis.png"
+
+        carX = 500;
+        carY = 500;
+        canvasSize = 1000;
+        interval = 24;
+        carSize = mobSize = 50;
+
+        appleY = (50 * Math.floor(Math.random()*20));
+        appleX = (50 * Math.floor(Math.random()*20));
+        appleSize = 30;
+
+        mobX = (50 * Math.floor(Math.random()*20));
+        mobY = (50 * Math.floor(Math.random()*20));
+        
+
+        score = bestScore = 0;
+
+        //c.onclick = () => (carX+= 30);
+
+        document.onkeydown = function(e) {
+            switch(e.which) {
+                case 37: carX -= 50;// left
+                break;
+
+                case 38: carY -= 50;// up
+                break;
+
+                case 39: carX += 50;// right
+                break;
+
+                case 40: carY += 50;// down
+                break;
+                default: return; // exit this handler for other keys
+            }
+            e.preventDefault(); // prevent the default action (scroll / move caret)
+        };
+
+    
+        setInterval(() => {
+            context.fillStyle = "#2f694c";
+            context.drawImage(canvas,0,0,canvasSize,canvasSize);
+            context.drawImage(apple,appleX,appleY,appleSize,appleSize);
+            context.drawImage(car, carX, carY, carSize, carSize);
+            context.fillStyle = "black";
+            context.font = "20px Verdana";
+            context.fillText("Score: " + score, 9, 25);
+            bestScore = bestScore < score ? score : bestScore;
+            context.fillText("Best Score: " + bestScore, 9,50);
+            context.fillText("CarX: " + carX + " CarY: " + carY, 9,75);
+            context.fillText("AppleX: " + appleX + " AppleY: " + appleY, 9,100);
+
+            function eating (carX,carY,appleX,appleY){
+                if( (carX == appleX) && (carY == appleY) ){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+
+
+            if (eating(carX,carY,appleX,appleY)){
+                appleY = (50 * Math.floor(Math.random()*20));
+                appleX = (50 * Math.floor(Math.random()*20));
+                score += 1;
+                carSize += score;
+            }
+            
+            if(carX>960 || carY>960 || carX<0 || carY<0 ){
+                carX = 480;
+                carY = 480;
+                appleY = (50 * Math.floor(Math.random()*20));
+                appleX = (50 * Math.floor(Math.random()*20));
+                score = 0;
+                carSize = 50;
+            }
+
+            
+        }, interval)
+
+
+
+     /* tieX = tieDY = score = bestScore = 0;
+        tieY = pipeX = pipeGap = 200;
+        interval = pipeWidth = topPipeBottomY = 24;
+        tieSize = 48;
+        canvasSize = pipeX = 400;
+        c.onclick = () => (tieDY = 10);
+
+
+
+        setInterval(() => {
+            context.fillStyle = "#2064bd";
+            context.fillRect(0,0,canvasSize,canvasSize); // draw sky
+            tieY -= tieDY -= 0.5; // gravity
+            context.drawImage(tie, tieX, tieY, tieSize, tieSize); // draw tie
+            context.fillStyle = "silver";
+            pipeX -= 8;
+            pipeX < -pipeWidth && 
+                ((pipeX = canvasSize), (topPipeBottomY = pipeGap * Math.random()));
+            context.fillRect(pipeX, 0, pipeWidth, topPipeBottomY); // draw top pipe
+            context.fillRect(pipeX, topPipeBottomY + pipeGap, pipeWidth, canvasSize); // draw bottom pipe
+            context.fillStyle = "black";
+            context.fillText("Score: " + score++, 9, 25);
+            bestScore = bestScore < score ? score : bestScore;
+            context.fillText("Best Score: " + bestScore, 9,50);
+            (((tieY < topPipeBottomY || tieY > topPipeBottomY + pipeGap) && pipeX < tieSize * (208/224)) // tie hit pipe?
+                || tieY > canvasSize || tieY < 0) && // tie falls off screen
+            ((tieDY = 0), (tieY = 200), (pipeX = canvasSize), (score = 0)); // tie died    
+            }, interval) */
+    </script>
+</body>
