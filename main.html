@@ -6,13 +6,22 @@
         const apple = new Image();
         const canvas = new Image();
         const mob = new Image();
+        const kalp1 = new Image();
+        const kalp2 = new Image();
+        const kalp3 = new Image();
         car.src = "salih.png";
-        apple.src = "apple.png"
-        canvas.src = "salihgrass.png"
-        mob.src = "halis.png"
+        apple.src = "apple.png";
+        canvas.src = "salihgrass.png";
+        mob.src = "halis.png";
+        kalp1.src = "kalp1.png";
+        kalp2.src = "kalp1.png";
+        kalp3.src = "kalp1.png";
 
-        carX = 500;
-        carY = 500;
+        var can = 3
+        kalpSize = 30;
+
+        var carX = 500;
+        var carY = 500;
         canvasSize = 1000;
         interval = 24;
         carSize = mobSize = 50;
@@ -28,8 +37,43 @@
         score = bestScore = 0;
 
         //c.onclick = () => (carX+= 30);
+        function mobMove(){
+            var farkX = mobX-carX;          // fark>0 mob sağda, fark<0 ise mob solda
+            var farkY = mobY-carY;          // fark>0 mob aşağıda fark<0 mob yukarıda
+            if(farkX>0 && farkY>0){                 // salih sol üstte
+                mobX -= 50;
+                mobY -= 50;
+            }  
+            else if(farkX>0 && farkY<0){            // salih sol aşağıda
+                mobX -= 50;
+                mobY += 50;
+            }
+            else if(farkX<0 && farkY>0){            // salih sağ üstte
+                mobX += 50;
+                mobY -= 50;
+            }
+            else if(farkX<0 && farkY<0){            // salih sağ altta
+                mobX += 50;
+                mobY += 50;
+            }
+            else if(farkX==0 && farkY>0){           // salih yukarda
+                mobY -= 100;
+            }
+            else if(farkX==0 && farkY<0){           // salih aşağıda
+                mobY += 100;
+            }
+            else if(farkX>0 && farkY==0){           // salih solda
+                mobX -= 100;
+            }
+            else if(farkX<0 && farkY==0){           // salih sağda
+                mobX += 100;
+            }
+        }
 
         document.onkeydown = function(e) {
+            if(Math.ceil(Math.random()*2)==2){
+                mobMove()
+            } 
             switch(e.which) {
                 case 37: carX -= 50;// left
                 break;
@@ -42,6 +86,7 @@
 
                 case 40: carY += 50;// down
                 break;
+
                 default: return; // exit this handler for other keys
             }
             e.preventDefault(); // prevent the default action (scroll / move caret)
@@ -53,13 +98,17 @@
             context.drawImage(canvas,0,0,canvasSize,canvasSize);
             context.drawImage(apple,appleX,appleY,appleSize,appleSize);
             context.drawImage(car, carX, carY, carSize, carSize);
+            context.drawImage(mob, mobX, mobY, mobSize, mobSize);
+            context.drawImage(kalp1, 968, 0, kalpSize, kalpSize);
+            context.drawImage(kalp2, 936, 0, kalpSize, kalpSize);
+            context.drawImage(kalp3, 904, 0, kalpSize, kalpSize);
             context.fillStyle = "black";
             context.font = "20px Verdana";
             context.fillText("Score: " + score, 9, 25);
             bestScore = bestScore < score ? score : bestScore;
             context.fillText("Best Score: " + bestScore, 9,50);
-            context.fillText("CarX: " + carX + " CarY: " + carY, 9,75);
-            context.fillText("AppleX: " + appleX + " AppleY: " + appleY, 9,100);
+            context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
+            context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
 
             function eating (carX,carY,appleX,appleY){
                 if( (carX == appleX) && (carY == appleY) ){
@@ -69,24 +118,47 @@
                 }
             }
 
-
-
+            
             if (eating(carX,carY,appleX,appleY)){
                 appleY = (50 * Math.floor(Math.random()*20));
                 appleX = (50 * Math.floor(Math.random()*20));
                 score += 1;
-                carSize += score;
+                //carSize += 10;
             }
             
-            if(carX>960 || carY>960 || carX<0 || carY<0 ){
+            if(carX>960 || carY>960 || carX<0 || carY<0){
                 carX = 500;
                 carY = 500;
                 appleY = (50 * Math.floor(Math.random()*20));
                 appleX = (50 * Math.floor(Math.random()*20));
-                score = 0;
+                mobY = (50 * Math.floor(Math.random()*20));
+                mobX = (50 * Math.floor(Math.random()*20));
                 carSize = 50;
+                can--;
             }
 
+            if((carX == mobX) && (carY == mobY)){
+                can--;
+                carSize -= score;
+                mobY = (50 * Math.floor(Math.random()*20));
+                mobX = (50 * Math.floor(Math.random()*20));
+                appleY = (50 * Math.floor(Math.random()*20));
+                appleX = (50 * Math.floor(Math.random()*20));
+            }
+
+            if(can==2){
+                kalp3.src = "kalpsiz.png"
+            }
+            if(can==1){
+                kalp2.src = "kalpsiz.png"
+            }
+            if(can==0){
+                kalp3.src = "kalp1.png"
+                kalp2.src = "kalp1.png"
+                score = 0;
+                can = 3;
+                carSize = 50;
+            }
             
         }, interval)
 
