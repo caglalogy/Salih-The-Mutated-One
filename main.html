@@ -24,7 +24,7 @@
         var carY = 500;
         canvasSize = 1000;
         interval = 24;
-        carSize = 100;
+        carSize = 50;
         mobSize = 50;
 
         appleY = (50 * Math.floor(Math.random()*20));
@@ -72,20 +72,29 @@
         }
 
         document.onkeydown = function(e) {
-            if(Math.ceil(Math.random()*2)==2){
-                mobMove()
-            } 
-            switch(e.which) {
+                switch(e.which) {
                 case 37: carX -= 50;// left
+                if(Math.ceil(Math.random()*2)==2){
+                mobMove()
+                }
                 break;
 
                 case 38: carY -= 50;// up
+                if(Math.ceil(Math.random()*2)==2){
+                mobMove()
+                }
                 break;
 
                 case 39: carX += 50;// right
+                if(Math.ceil(Math.random()*2)==2){
+                mobMove()
+                }
                 break;
 
                 case 40: carY += 50;// down
+                if(Math.ceil(Math.random()*2)==2){
+                mobMove()
+                }
                 break;
 
                 default: 32; // exit this handler for other keys
@@ -125,7 +134,7 @@
                 appleY = (50 * Math.floor(Math.random()*20));
                 appleX = (50 * Math.floor(Math.random()*20));
                 score += 1;
-                carSize += 10;
+                //carSize += 10;
             }
             
             if(carX>960 || carY>960 || carX<0 || carY<0){
