@@ -9,10 +9,10 @@
         const kalp1 = new Image();
         const kalp2 = new Image();
         const kalp3 = new Image();
-        car.src = "salih.png";
-        apple.src = "apple.png";
+        car.src = "yozdil.png";
+        apple.src = "turk.png";
         canvas.src = "salihgrass.png";
-        mob.src = "halis.png";
+        mob.src = "ampul.png";
         kalp1.src = "kalp1.png";
         kalp2.src = "kalp1.png";
         kalp3.src = "kalp1.png";
@@ -24,7 +24,8 @@
         var carY = 500;
         canvasSize = 1000;
         interval = 24;
-        carSize = mobSize = 50;
+        carSize = 100;
+        mobSize = 50;
 
         appleY = (50 * Math.floor(Math.random()*20));
         appleX = (50 * Math.floor(Math.random()*20));
@@ -87,7 +88,7 @@
                 case 40: carY += 50;// down
                 break;
 
-                default: return; // exit this handler for other keys
+                default: 32; // exit this handler for other keys
             }
             e.preventDefault(); // prevent the default action (scroll / move caret)
         };
@@ -118,12 +119,13 @@
                 }
             }
 
+            /// GOLDEN APPLE
             
             if (eating(carX,carY,appleX,appleY)){
                 appleY = (50 * Math.floor(Math.random()*20));
                 appleX = (50 * Math.floor(Math.random()*20));
                 score += 1;
-                //carSize += 10;
+                carSize += 10;
             }
             
             if(carX>960 || carY>960 || carX<0 || carY<0){
