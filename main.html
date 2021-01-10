@@ -2,6 +2,7 @@
     <canvas id="c" width="1000" height="1000"></canvas>
     <script>
         context = c.getContext("2d");
+        // IMAGES
         const car = new Image();
         const apple = new Image();
         const canvas = new Image();
@@ -16,28 +17,29 @@
         kalp1.src = "kalp1.png";
         kalp2.src = "kalp1.png";
         kalp3.src = "kalp1.png";
-
+        // GAME ELEMENTS
         var can = 3
-        kalpSize = 30;
-
+        var kalpSize = 30;
+        var canvasSize = 1000;
+        var interval = 24;
+        var score = bestScore = 0;
+        function randomLocation() {
+            return (50 * Math.floor(Math.random()*20));
+        }
+        // CAHARCTER
         var carX = 500;
         var carY = 500;
-        canvasSize = 1000;
-        interval = 24;
-        carSize = 50;
-        mobSize = 50;
-
-        appleY = (50 * Math.floor(Math.random()*20));
-        appleX = (50 * Math.floor(Math.random()*20));
-        appleSize = 30;
-
-        mobX = (50 * Math.floor(Math.random()*20));
-        mobY = (50 * Math.floor(Math.random()*20));
-        
-
-        score = bestScore = 0;
-
-        //c.onclick = () => (carX+= 30);
+        var carSize = 50;
+        // APPLE
+        var appleY = randomLocation();
+        var appleX = randomLocation();
+        var appleSize = 30;
+        // MOB
+        var mobX = randomLocation();
+        var mobY = randomLocation();
+        var mobSize = 50;
+        var mobCarp = 3;
+        // FUNCTIONS
         function mobMove(){
             var farkX = mobX-carX;          // fark>0 mob sağda, fark<0 ise mob solda
             var farkY = mobY-carY;          // fark>0 mob aşağıda fark<0 mob yukarıda
@@ -73,26 +75,26 @@
 
         document.onkeydown = function(e) {
                 switch(e.which) {
-                case 37: carX -= 50;// left
-                if(Math.ceil(Math.random()*2)==2){
+                case 37: carX -= 50;                // left
+                if(Math.ceil(Math.random()*mobCarp)==2){
                 mobMove()
                 }
                 break;
 
-                case 38: carY -= 50;// up
-                if(Math.ceil(Math.random()*2)==2){
+                case 38: carY -= 50;                // up
+                if(Math.ceil(Math.random()*mobCarp)==2){
                 mobMove()
                 }
                 break;
 
-                case 39: carX += 50;// right
-                if(Math.ceil(Math.random()*2)==2){
+                case 39: carX += 50;                // right
+                if(Math.ceil(Math.random()*mobCarp)==2){
                 mobMove()
                 }
                 break;
 
-                case 40: carY += 50;// down
-                if(Math.ceil(Math.random()*2)==2){
+                case 40: carY += 50;                // down
+                if(Math.ceil(Math.random()*mobCarp)==2){
                 mobMove()
                 }
                 break;
@@ -102,7 +104,6 @@
             e.preventDefault(); // prevent the default action (scroll / move caret)
         };
 
-    
         setInterval(() => {
             context.fillStyle = "#2f694c";
             context.drawImage(canvas,0,0,canvasSize,canvasSize);
@@ -117,9 +118,9 @@
             context.fillText("Score: " + score, 9, 25);
             bestScore = bestScore < score ? score : bestScore;
             context.fillText("Best Score: " + bestScore, 9,50);
-            context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
-            context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
-
+            //context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
+            //context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
+            // DID YOU EAT THE APPLE
             function eating (carX,carY,appleX,appleY){
                 if( (carX == appleX) && (carY == appleY) ){
                     return true;
@@ -127,36 +128,35 @@
                     return false;
                 }
             }
-
-            /// GOLDEN APPLE
-            
+            ////////////////////////////////// GOLDEN APPLE
+            // IF YOU EAT THE APPLE
             if (eating(carX,carY,appleX,appleY)){
-                appleY = (50 * Math.floor(Math.random()*20));
-                appleX = (50 * Math.floor(Math.random()*20));
+                appleY = randomLocation();
+                appleX = randomLocation();
                 score += 1;
                 //carSize += 10;
             }
-            
+            // IF YOU TOUCH THE BORDER
             if(carX>960 || carY>960 || carX<0 || carY<0){
                 carX = 500;
                 carY = 500;
-                appleY = (50 * Math.floor(Math.random()*20));
-                appleX = (50 * Math.floor(Math.random()*20));
-                mobY = (50 * Math.floor(Math.random()*20));
-                mobX = (50 * Math.floor(Math.random()*20));
+                appleY = randomLocation();
+                appleX = randomLocation();
+                mobY = randomLocation();
+                mobX = randomLocation();
                 carSize = 50;
                 can--;
             }
-
+            // IF MOB CATCH YOU
             if((carX == mobX) && (carY == mobY)){
                 can--;
                 carSize -= score;
-                mobY = (50 * Math.floor(Math.random()*20));
-                mobX = (50 * Math.floor(Math.random()*20));
-                appleY = (50 * Math.floor(Math.random()*20));
-                appleX = (50 * Math.floor(Math.random()*20));
+                mobY = randomLocation();
+                mobX = randomLocation();
+                appleY = randomLocation();
+                appleX = randomLocation();
             }
-
+            // LIFE COUNTING
             if(can==2){
                 kalp3.src = "kalpsiz.png"
             }
@@ -170,38 +170,7 @@
                 can = 3;
                 carSize = 50;
             }
-            
+            //
         }, interval)
-
-
-
-     /* tieX = tieDY = score = bestScore = 0;
-        tieY = pipeX = pipeGap = 200;
-        interval = pipeWidth = topPipeBottomY = 24;
-        tieSize = 48;
-        canvasSize = pipeX = 400;
-        c.onclick = () => (tieDY = 10);
-
-
-
-        setInterval(() => {
-            context.fillStyle = "#2064bd";
-            context.fillRect(0,0,canvasSize,canvasSize); // draw sky
-            tieY -= tieDY -= 0.5; // gravity
-            context.drawImage(tie, tieX, tieY, tieSize, tieSize); // draw tie
-            context.fillStyle = "silver";
-            pipeX -= 8;
-            pipeX < -pipeWidth && 
-                ((pipeX = canvasSize), (topPipeBottomY = pipeGap * Math.random()));
-            context.fillRect(pipeX, 0, pipeWidth, topPipeBottomY); // draw top pipe
-            context.fillRect(pipeX, topPipeBottomY + pipeGap, pipeWidth, canvasSize); // draw bottom pipe
-            context.fillStyle = "black";
-            context.fillText("Score: " + score++, 9, 25);
-            bestScore = bestScore < score ? score : bestScore;
-            context.fillText("Best Score: " + bestScore, 9,50);
-            (((tieY < topPipeBottomY || tieY > topPipeBottomY + pipeGap) && pipeX < tieSize * (208/224)) // tie hit pipe?
-                || tieY > canvasSize || tieY < 0) && // tie falls off screen
-            ((tieDY = 0), (tieY = 200), (pipeX = canvasSize), (score = 0)); // tie died    
-            }, interval) */
     </script>
 </body>
