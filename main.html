@@ -10,19 +10,23 @@
         const kalp1 = new Image();
         const kalp2 = new Image();
         const kalp3 = new Image();
-        car.src = "images/yozdil.png";
-        apple.src = "images/turk.png";
-        canvas.src = "images/salihgrass.png";
-        mob.src = "images/ampul.png";
+        const wall = new Image();
+        car.src = "images/salih.png";
+        apple.src = "images/apple.png";
+        canvas.src = "images/grass.png";
+        mob.src = "images/halis.png";
         kalp1.src = "images/kalp1.png";
         kalp2.src = "images/kalp1.png";
         kalp3.src = "images/kalp1.png";
+        wall.src = "images/wall.png"
         // GAME ELEMENTS
         var can = 3
         var kalpSize = 30;
         var canvasSize = 1000;
         var interval = 24;
         var score = bestScore = 0;
+        var turn = 0;
+        var moveNum = 0;
         function randomLocation() {
             return (50 * Math.floor(Math.random()*20));
         }
@@ -30,6 +34,10 @@
         var carX = 500;
         var carY = 500;
         var carSize = 50;
+        // WALL
+        var wallX = randomLocation();
+        var wallY = randomLocation();
+        wallsize = 50;
         // APPLE
         var appleY = randomLocation();
         var appleX = randomLocation();
@@ -38,65 +46,111 @@
         var mobX = randomLocation();
         var mobY = randomLocation();
         var mobSize = 50;
-        var mobCarp = 3;
+        var mobCarp = 2;
+        function mobMoveChange(){
+            return Math.ceil(Math.random()*mobCarp)
+        } 
         // FUNCTIONS
+        function onMove(){
+            if((turn%3 != 1) && mobMoveChange()==1){
+                mobMove()
+            };
+            moveNum++;
+        }
+        // car move functions
+        function carLeft() {
+            carX -= 50;
+        }
+        function carRight() {
+            carX += 50;
+        }
+        function carUp() {
+            carY -= 50;
+        }
+        function carDown() {
+            carY += 50;
+        }
+        // mob move functions
+        function mobLeft() {
+            mobX -= 50;
+        }
+        function mobRight() {
+            mobX += 50;
+        }
+        function mobUp() {
+            mobY -= 50;
+        }
+        function mobDown() {
+            mobY += 50;
+        }
         function mobMove(){
             var farkX = mobX-carX;          // fark>0 mob sağda, fark<0 ise mob solda
             var farkY = mobY-carY;          // fark>0 mob aşağıda fark<0 mob yukarıda
+            
             if(farkX>0 && farkY>0){                 // salih sol üstte
-                mobX -= 50;
-                mobY -= 50;
+                mobLeft();
+                mobUp();
             }  
             else if(farkX>0 && farkY<0){            // salih sol aşağıda
-                mobX -= 50;
-                mobY += 50;
+                mobLeft();
+                mobDown();
             }
             else if(farkX<0 && farkY>0){            // salih sağ üstte
-                mobX += 50;
-                mobY -= 50;
+                mobRight();
+                mobUp();
             }
             else if(farkX<0 && farkY<0){            // salih sağ altta
-                mobX += 50;
-                mobY += 50;
+                mobRight();
+                mobDown();
             }
             else if(farkX==0 && farkY>0){           // salih yukarda
-                mobY -= 100;
+                mobUp();
             }
             else if(farkX==0 && farkY<0){           // salih aşağıda
-                mobY += 100;
+                mobDown();
             }
             else if(farkX>0 && farkY==0){           // salih solda
-                mobX -= 100;
+                mobLeft();
             }
             else if(farkX<0 && farkY==0){           // salih sağda
-                mobX += 100;
+                mobRight();
             }
+        }
+        // dying functions
+        function crossBorder() {
+            carX = 500;
+            carY = 500;
+            appleY = randomLocation();
+            appleX = randomLocation();
+            mobY = randomLocation();
+            mobX = randomLocation();
+            carSize = 50;
+            can--;
+        }
+        function eaten() {
+            can--;
+            mobY = randomLocation();
+            mobX = randomLocation();
+            appleY = randomLocation();
+            appleX = randomLocation();
         }
 
         document.onkeydown = function(e) {
                 switch(e.which) {
-                case 37: carX -= 50;                // left
-                if(Math.ceil(Math.random()*mobCarp)==2){
-                mobMove()
-                }
+                case 37: carLeft();                // left
+                onMove();
                 break;
 
-                case 38: carY -= 50;                // up
-                if(Math.ceil(Math.random()*mobCarp)==2){
-                mobMove()
-                }
+                case 38: carUp();                // up
+                onMove();
                 break;
 
-                case 39: carX += 50;                // right
-                if(Math.ceil(Math.random()*mobCarp)==2){
-                mobMove()
-                }
+                case 39: carRight();                // right
+                onMove();
                 break;
 
-                case 40: carY += 50;                // down
-                if(Math.ceil(Math.random()*mobCarp)==2){
-                mobMove()
-                }
+                case 40: carDown();                // down
+                onMove();
                 break;
 
                 default: 32; // exit this handler for other keys
@@ -113,11 +167,14 @@
             context.drawImage(kalp1, 968, 0, kalpSize, kalpSize);
             context.drawImage(kalp2, 936, 0, kalpSize, kalpSize);
             context.drawImage(kalp3, 904, 0, kalpSize, kalpSize);
+            context.drawImage(wall, wallX, wallY, wallsize, wallsize*3);
             context.fillStyle = "black";
             context.font = "20px Verdana";
             context.fillText("Score: " + score, 9, 25);
             bestScore = bestScore < score ? score : bestScore;
             context.fillText("Best Score: " + bestScore, 9,50);
+            context.fillText("Turn: " + turn, 9,75);
+            context.fillText("Move: " + moveNum, 9,100);
             //context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
             //context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
             // DID YOU EAT THE APPLE
@@ -134,27 +191,28 @@
                 appleY = randomLocation();
                 appleX = randomLocation();
                 score += 1;
+                turn ++;
                 //carSize += 10;
+            }
+            if(turn != 0 && turn%5 == 0){
+                apple.src = "images/goldelma.png";
+            }else {
+                apple.src = "images/apple.png";
+            }
+            // SALİH'S LEGS MOVES
+            if(moveNum != 0 && moveNum % 2 == 1){
+                car.src = "images/salih2.png";
+            }
+            else{ 
+                car.src = "images/salih.png";
             }
             // IF YOU TOUCH THE BORDER
             if(carX>960 || carY>960 || carX<0 || carY<0){
-                carX = 500;
-                carY = 500;
-                appleY = randomLocation();
-                appleX = randomLocation();
-                mobY = randomLocation();
-                mobX = randomLocation();
-                carSize = 50;
-                can--;
+                crossBorder();
             }
             // IF MOB CATCH YOU
             if((carX == mobX) && (carY == mobY)){
-                can--;
-                carSize -= score;
-                mobY = randomLocation();
-                mobX = randomLocation();
-                appleY = randomLocation();
-                appleX = randomLocation();
+                eaten();
             }
             // LIFE COUNTING
             if(can==2){
@@ -169,6 +227,8 @@
                 score = 0;
                 can = 3;
                 carSize = 50;
+                tur = 0;
+                moveNum = 0;
             }
             //
         }, interval)
