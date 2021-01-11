@@ -10,15 +10,13 @@
         const kalp1 = new Image();
         const kalp2 = new Image();
         const kalp3 = new Image();
-        const wall = new Image();
         car.src = "images/salih.png";
         apple.src = "images/apple.png";
-        canvas.src = "images/grass.png";
+        canvas.src = "images/salihLevel1.png";
         mob.src = "images/halis.png";
         kalp1.src = "images/kalp1.png";
         kalp2.src = "images/kalp1.png";
         kalp3.src = "images/kalp1.png";
-        wall.src = "images/wall.png"
         // GAME ELEMENTS
         var can = 3
         var kalpSize = 30;
@@ -34,14 +32,12 @@
         var carX = 500;
         var carY = 500;
         var carSize = 50;
-        // WALL
-        var wallX = randomLocation();
-        var wallY = randomLocation();
-        wallsize = 50;
         // APPLE
         var appleY = randomLocation();
         var appleX = randomLocation();
         var appleSize = 30;
+        var isAppleGold = false;
+        var ateGoldApple = false;
         // MOB
         var mobX = randomLocation();
         var mobY = randomLocation();
@@ -52,8 +48,8 @@
         } 
         // FUNCTIONS
         function onMove(){
-            if((turn%3 != 1) && mobMoveChange()==1){
-                mobMove()
+            if(mobMoveChange()==1 && ateGoldApple == false){
+                mobMove();
             };
             moveNum++;
         }
@@ -116,24 +112,7 @@
                 mobRight();
             }
         }
-        // dying functions
-        function crossBorder() {
-            carX = 500;
-            carY = 500;
-            appleY = randomLocation();
-            appleX = randomLocation();
-            mobY = randomLocation();
-            mobX = randomLocation();
-            carSize = 50;
-            can--;
-        }
-        function eaten() {
-            can--;
-            mobY = randomLocation();
-            mobX = randomLocation();
-            appleY = randomLocation();
-            appleX = randomLocation();
-        }
+
 
         document.onkeydown = function(e) {
                 switch(e.which) {
@@ -167,14 +146,13 @@
             context.drawImage(kalp1, 968, 0, kalpSize, kalpSize);
             context.drawImage(kalp2, 936, 0, kalpSize, kalpSize);
             context.drawImage(kalp3, 904, 0, kalpSize, kalpSize);
-            context.drawImage(wall, wallX, wallY, wallsize, wallsize*3);
             context.fillStyle = "black";
             context.font = "20px Verdana";
             context.fillText("Score: " + score, 9, 25);
             bestScore = bestScore < score ? score : bestScore;
             context.fillText("Best Score: " + bestScore, 9,50);
-            context.fillText("Turn: " + turn, 9,75);
             context.fillText("Move: " + moveNum, 9,100);
+            context.fillText("Can: " + can, 9,125);
             //context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
             //context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
             // DID YOU EAT THE APPLE
@@ -185,20 +163,18 @@
                     return false;
                 }
             }
-            ////////////////////////////////// GOLDEN APPLE
             // IF YOU EAT THE APPLE
             if (eating(carX,carY,appleX,appleY)){
-                appleY = randomLocation();
-                appleX = randomLocation();
-                score += 1;
-                turn ++;
-                //carSize += 10;
+                ateApple();
             }
-            if(turn != 0 && turn%5 == 0){
+            ////////////////////////////////// GOLDEN APPLE
+            /*if(turn != 0 && turn%5 == 0){
+                isAppleGold = true;
                 apple.src = "images/goldelma.png";
             }else {
                 apple.src = "images/apple.png";
-            }
+                isAppleGold = false;
+            }*/
             // SALİH'S LEGS MOVES
             if(moveNum != 0 && moveNum % 2 == 1){
                 car.src = "images/salih2.png";
@@ -209,10 +185,6 @@
             // IF YOU TOUCH THE BORDER
             if(carX>960 || carY>960 || carX<0 || carY<0){
                 crossBorder();
-            }
-            // IF MOB CATCH YOU
-            if((carX == mobX) && (carY == mobY)){
-                eaten();
             }
             // LIFE COUNTING
             if(can==2){
@@ -227,10 +199,44 @@
                 score = 0;
                 can = 3;
                 carSize = 50;
-                tur = 0;
                 moveNum = 0;
             }
-            //
+            // IF MOB CATCH YOU
+            if((carX == mobX) && (carY == mobY)){
+                eaten();
+            }
+                    // event functions
+            function crossBorder() {
+                carX = 500;
+                carY = 500;
+                appleY = randomLocation();
+                appleX = randomLocation();
+                mobY = randomLocation();
+                mobX = randomLocation();
+                carSize = 50;
+                can--;
+            }
+            function eaten() {
+                carX = 500;
+                carY = 500;
+                mobY = randomLocation();
+                mobX = randomLocation();
+                appleY = randomLocation();
+                appleX = randomLocation();
+                can--;
+            }
+            function ateApple() {
+                appleY = randomLocation();
+                appleX = randomLocation();
+                score += 1;
+                turn ++;
+                //carSize += 10;
+                if(isAppleGold==true){
+                    ateGoldApple = true;
+                } else {
+                    ateGoldApple = false;
+                }
+            }
         }, interval)
     </script>
 </body>
