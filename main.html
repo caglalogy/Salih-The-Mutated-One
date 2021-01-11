@@ -113,6 +113,38 @@
             }
         }
 
+        // event functions
+        function crossBorder() {
+            carX = 500;
+            carY = 500;
+            appleY = randomLocation();
+            appleX = randomLocation();
+            mobY = randomLocation();
+            mobX = randomLocation();
+            carSize = 50;
+            can--;
+        }
+        function ateApple() {
+            appleY = randomLocation();
+            appleX = randomLocation();
+            score += 1;
+            turn ++;
+            //carSize += 10;
+            if(isAppleGold==true){
+                ateGoldApple = true;
+            } else {
+                ateGoldApple = false;
+            }
+        }
+        function eaten() {
+            carX = 500;
+            carY = 500;
+            mobY = randomLocation();
+            mobX = randomLocation();
+            appleY = randomLocation();
+            appleX = randomLocation();
+            can--;
+        }
 
         document.onkeydown = function(e) {
                 switch(e.which) {
@@ -120,7 +152,7 @@
                 onMove();
                 break;
 
-                case 38: carUp();                // up
+                case 38: carUp();                   // up
                 onMove();
                 break;
 
@@ -163,7 +195,7 @@
                     return false;
                 }
             }
-            // IF YOU EAT THE APPLE
+            // IF YOU EAT THE APPLE 
             if (eating(carX,carY,appleX,appleY)){
                 ateApple();
             }
@@ -186,56 +218,24 @@
             if(carX>960 || carY>960 || carX<0 || carY<0){
                 crossBorder();
             }
-            // LIFE COUNTING
-            if(can==2){
-                kalp3.src = "kalpsiz.png"
-            }
-            if(can==1){
-                kalp2.src = "kalpsiz.png"
-            }
-            if(can==0){
-                kalp3.src = "kalp1.png"
-                kalp2.src = "kalp1.png"
-                score = 0;
-                can = 3;
-                carSize = 50;
-                moveNum = 0;
-            }
             // IF MOB CATCH YOU
             if((carX == mobX) && (carY == mobY)){
                 eaten();
             }
-                    // event functions
-            function crossBorder() {
-                carX = 500;
-                carY = 500;
-                appleY = randomLocation();
-                appleX = randomLocation();
-                mobY = randomLocation();
-                mobX = randomLocation();
+            // LIFE COUNTING
+            if(can==2){
+                kalp3.src = "images/kalpsiz.png"
+            }
+            if(can==1){
+                kalp2.src = "images/kalpsiz.png"
+            }
+            if(can==0){
+                kalp3.src = "images/kalp1.png";
+                kalp2.src = "images/kalp1.png";
+                score = 0;
+                can = 3;
                 carSize = 50;
-                can--;
-            }
-            function eaten() {
-                carX = 500;
-                carY = 500;
-                mobY = randomLocation();
-                mobX = randomLocation();
-                appleY = randomLocation();
-                appleX = randomLocation();
-                can--;
-            }
-            function ateApple() {
-                appleY = randomLocation();
-                appleX = randomLocation();
-                score += 1;
-                turn ++;
-                //carSize += 10;
-                if(isAppleGold==true){
-                    ateGoldApple = true;
-                } else {
-                    ateGoldApple = false;
-                }
+                moveNum = 0;
             }
         }, interval)
     </script>
