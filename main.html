@@ -10,10 +10,10 @@
         const kalp1 = new Image();
         const kalp2 = new Image();
         const kalp3 = new Image();
-        car.src = "images/salih.png";
+        car.src = "images/cagla.png";
         apple.src = "images/apple.png";
         canvas.src = "images/salihLevel1.png";
-        mob.src = "images/halis.png";
+        mob.src = "images/cos.png";
         kalp1.src = "images/kalp1.png";
         kalp2.src = "images/kalp1.png";
         kalp3.src = "images/kalp1.png";
@@ -71,33 +71,57 @@
         }
         // car move functions
         function carLeft() {
-            var newCarX = carX+50
-            if(mapCheck([newCarX,carY]) == false){
+            var leftCarX = carX-50;
+            if(mapCheck([leftCarX,carY]) == false){
                 carX -= 50;
                 onMove();
             }
         }
         function carRight() {
-            carX += 50;
+            var rightCarX = carX+50;
+            if(mapCheck([rightCarX,carY]) == false){
+                carX += 50;
+                onMove();
+            }
         }
         function carUp() {
-            carY -= 50;
+            var upCarY = carY-50;
+            if(mapCheck([carX,upCarY]) == false){
+                carY -= 50;
+                onMove();
+            }
         }
         function carDown() {
-            carY += 50;
+            var downCarY = carY+50;
+            if(mapCheck([carX,downCarY]) == false){
+                carY += 50;
+                onMove();
+            }
         }
         // mob move functions
         function mobLeft() {
-            mobX -= 50;
+            var leftMobX = mobX-50;
+            if(mapCheck([leftMobX,mobY]) == false){
+                mobX -= 50;
+            }
         }
         function mobRight() {
-            mobX += 50;
+            var rightMobX = mobX+50;
+            if(mapCheck([rightMobX,mobY]) == false){
+                mobX += 50;
+            }
         }
         function mobUp() {
-            mobY -= 50;
+            var upMobY = mobY-50;
+            if(mapCheck([mobX,upMobY]) == false){
+                mobY -= 50;
+            }
         }
         function mobDown() {
-            mobY += 50;
+            var downMobY = mobY+50;
+            if(mapCheck([mobX,downMobY]) == false){
+                mobY += 50;
+            }
         }
         function mobMove(){
             var farkX = mobX-carX;          // fark>0 mob sağda, fark<0 ise mob solda
@@ -167,20 +191,17 @@
         }
 
         document.onkeydown = function(e) {
-                switch(e.which) {
+            switch(e.which) {
                 case 37: carLeft();                // left
                 break;
 
                 case 38: carUp();                   // up
-                onMove();
                 break;
 
                 case 39: carRight();                // right
-                onMove();
                 break;
 
                 case 40: carDown();                // down
-                onMove();
                 break;
 
                 default: 32; // exit this handler for other keys
@@ -204,7 +225,7 @@
             context.fillText("Best Score: " + bestScore, 9,50);
             context.fillText("Move: " + moveNum, 9,100);
             context.fillText("Can: " + can, 9,125);
-            context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
+            //context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
             //context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
             // DID YOU EAT THE APPLE
             function eating (carX,carY,appleX,appleY){
@@ -227,12 +248,12 @@
                 isAppleGold = false;
             }*/
             // SALİH'S LEGS MOVES
-            if(moveNum != 0 && moveNum % 2 == 1){
+            /*if(moveNum != 0 && moveNum % 2 == 1){
                 car.src = "images/salih2.png";
             }
             else{ 
                 car.src = "images/salih.png";
-            }
+            }*/
             // IF YOU TOUCH THE BORDER
             if(carX>960 || carY>960 || carX<0 || carY<0){
                 crossBorder();
