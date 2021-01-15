@@ -75,7 +75,8 @@
         function mobMoveChange(){
             return Math.ceil(Math.random()*mobCarp)
         } 
-        // FUNCTIONS
+        // FUNCTIONS //
+        // move functions
         function onMove(){
             if(mobMoveChange()==1 && ateGoldApple == false){
                 mobMove();
@@ -169,7 +170,10 @@
                 mobRight();
             }
         }
-
+        // spawn functions
+        function spawnApple() {
+            
+        }
         // event functions
         function crossBorder() {
             carX = 500;
@@ -182,8 +186,9 @@
             can--;
         }
         function ateApple() {
-            appleY = randomLocation();
-            appleX = randomLocation();
+            spawnApple();
+            //appleY = randomLocation();
+            //appleX = randomLocation();
             score += 1;
             turn ++;
             //carSize += 10;
