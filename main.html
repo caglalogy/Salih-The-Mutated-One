@@ -1,6 +1,21 @@
-<body style="height: 100vh; background: #111111; text-align: center; overflow: hidden;">
+<body style="height: 100vh; background: #000000; text-align: center; overflow: hidden;">
     <canvas id="c" width="1000" height="1000"></canvas>
+    <!-- <input type="file" id="fileInput"> -->
     <script>
+        //FILE OKUMA 
+
+        /*let ReadBestScore;
+        //let file = "./bestScore.txt";
+        document.getElementById('fileInput').addEventListener('change', function selectedFileChanged() {
+            const reader = new FileReader();
+            reader.onload = function fileReadCompleted() {
+                // when the reader is done, the content is in reader.result.
+                ReadBestScore = reader.result;
+            };
+            reader.readAsText(this.files[0]);
+        });*/
+
+        
         context = c.getContext("2d");
         // IMAGES
         const car = new Image();
@@ -62,14 +77,12 @@
         var carY = 500;
         var carSize = 50;
         // APPLE
-        var appleY = randomLocation();
-        var appleX = randomLocation();
+        spawnApple();
         var appleSize = 30;
         var isAppleGold = false;
         var ateGoldApple = false;
         // MOB
-        var mobX = randomLocation();
-        var mobY = randomLocation();
+        spawnMob();
         var mobSize = 50;
         var mobCarp = 2;
         function mobMoveChange(){
@@ -172,23 +185,32 @@
         }
         // spawn functions
         function spawnApple() {
-            
+            //appleX ve appleY'nin koordinatlari duvara denk geldigi surece yeni koordinat ata
+            do{
+                appleX = randomLocation();
+                appleY = randomLocation();
+            }
+            while(mapCheck([appleX,appleY]) == true);
+        }
+
+        function spawnMob() {
+            //appleX ve appleY'nin koordinatlari duvara denk geldigi surece yeni koordinat ata
+            do{
+                mobX = randomLocation();
+                mobY = randomLocation();
+            }
+            while(mapCheck([mobX,mobY]) == true);
         }
         // event functions
         function crossBorder() {
             carX = 500;
             carY = 500;
-            appleY = randomLocation();
-            appleX = randomLocation();
-            mobY = randomLocation();
-            mobX = randomLocation();
+            spawnApple();
+            spawnMob();
             carSize = 50;
             can--;
         }
         function ateApple() {
-            spawnApple();
-            //appleY = randomLocation();
-            //appleX = randomLocation();
             score += 1;
             turn ++;
             //carSize += 10;
@@ -197,14 +219,13 @@
             } else {
                 ateGoldApple = false;
             }
+            spawnApple();
         }
         function eaten() {
             carX = 500;
             carY = 500;
-            mobY = randomLocation();
-            mobX = randomLocation();
-            appleY = randomLocation();
-            appleX = randomLocation();
+            spawnMob();
+            spawnApple();
             can--;
         }
 
@@ -243,6 +264,7 @@
             context.fillText("Best Score: " + bestScore, 9,50);
             context.fillText("Move: " + moveNum, 9,100);
             context.fillText("Can: " + can, 9,125);
+            context.fillText("Read Best Score : " + ReadBestScore, 9,150);
             //context.fillText("CarX: " + carX + ", CarY: " + carY, 9,75);
             //context.fillText("AppleX: " + appleX + ", AppleY: " + appleY, 9,100);
             // DID YOU EAT THE APPLE
@@ -258,13 +280,13 @@
                 ateApple();
             }
             ////////////////////////////////// GOLDEN APPLE
-            /*if(turn != 0 && turn%5 == 0){
+            if(turn != 0 && turn%5 == 0){
                 isAppleGold = true;
                 apple.src = "images/goldelma.png";
             }else {
                 apple.src = "images/apple.png";
                 isAppleGold = false;
-            }*/
+            }
             // SALİH'S LEGS MOVES
             /*if(moveNum != 0 && moveNum % 2 == 1){
                 car.src = "images/salih2.png";
@@ -278,7 +300,7 @@
             }
             // IF MOB CATCH YOU
             if((carX == mobX) && (carY == mobY)){
-                //eaten();
+                eaten();
             }
             // LIFE COUNTING
             if(can==2){
