@@ -312,5 +312,6 @@ setInterval(() => {
         can = 3;
         carSize = 50;
         moveNum = 0;
+        turn = 0;
     }
 }, interval)
